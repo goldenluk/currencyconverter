@@ -1,12 +1,14 @@
 package ru.golden.currencyconverter.feature.converter.presentation
 
 import android.os.Bundle
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import ru.golden.currencyconverter.base.BaseViewModel
 import ru.golden.currencyconverter.feature.converter.data.model.CurrencyModel
 import ru.golden.currencyconverter.feature.converter.domain.GetCurrentCurrenciesUseCase
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -14,6 +16,8 @@ import javax.inject.Inject
  * Date: 21.11.2018
  * Time: 12:19
  */
+const val SECOND_IN_MILLISECONDS = 1000L
+
 class ConverterViewModel @Inject constructor(
 	private val getCurrentCurrenciesUseCase: GetCurrentCurrenciesUseCase
 ) : BaseViewModel() {
@@ -23,7 +27,10 @@ class ConverterViewModel @Inject constructor(
 	private var getCurrentCurrenciesDisposable: Disposable? = null
 
 	override fun onBind(state: Bundle?) {
-		getCurrentCurrenciesDisposable = getCurrentCurrenciesUseCase.execute("EUR")
+		getCurrentCurrenciesDisposable = Observable.interval(SECOND_IN_MILLISECONDS, TimeUnit.MILLISECONDS)
+			.flatMap {
+				getCurrentCurrenciesUseCase.execute("EUR").toObservable()
+			}
 			.subscribeOn(Schedulers.io())
 			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe(this::onCurrentCurrenciesLoaded, this::onCurrentCurrenciesLoadingFailed)

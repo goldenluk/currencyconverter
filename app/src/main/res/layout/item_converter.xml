@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<data>
+
+		<import type="kotlin.Unit"/>
+
+		<variable
+			name="uiModel"
+			type="ru.golden.currencyconverter.feature.converter.presentation.ui.ConverterItemUiModel"/>
+
+		<variable
+			name="isValueEditable"
+			type="Boolean"/>
+
+		<variable
+			name="onMenuClickAction"
+			type="kotlin.jvm.functions.Function1&lt;String,Unit>"/>
+
+	</data>
+
+	<android.support.constraint.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+
+
+	</android.support.constraint.ConstraintLayout>
+
+</layout>
