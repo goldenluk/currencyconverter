@@ -2,6 +2,8 @@ package ru.golden.currencyconverter.feature.converter.presentation.ui
 
 import android.os.Bundle
 import ru.golden.currencyconverter.R
+import ru.golden.currencyconverter.base.observe
+import ru.golden.currencyconverter.base.observeRequireNonNull
 import ru.golden.currencyconverter.baseui.BaseFragment
 import ru.golden.currencyconverter.databinding.FragmentConverterBinding
 import ru.golden.currencyconverter.feature.converter.presentation.ConverterViewModel
@@ -19,11 +21,25 @@ class ConverterFragment : BaseFragment<FragmentConverterBinding>() {
 	@Inject
 	lateinit var viewModel: ConverterViewModel
 
+	@Inject
+	lateinit var adapter: ConverterAdapter
+
 	override fun initBinding(binding: FragmentConverterBinding) {
 		binding.viewModel = viewModel
+		binding.recyclerView.adapter = adapter
 	}
 
-	override fun initViewModel(state: Bundle?) = viewModel.onBind(state)
+	override fun initViewModel(state: Bundle?) {
+		viewModel.onBind(state)
+
+		viewModel.currenciesLoadedEvent.observeRequireNonNull(this) {
+			adapter.items = it
+		}
+
+		viewModel.currenciesUpdatedEvent.observe(this) {
+			viewModel.updateItemsValue(adapter.items)
+		}
+	}
 
 	override fun onDestroy() {
 		super.onDestroy()

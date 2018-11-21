@@ -6,8 +6,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import ru.golden.currencyconverter.base.BaseViewModel
+import ru.golden.currencyconverter.base.SingleLiveEvent
 import ru.golden.currencyconverter.feature.converter.data.model.CurrencyModel
+import ru.golden.currencyconverter.feature.converter.domain.CreateUiModelsUseCase
 import ru.golden.currencyconverter.feature.converter.domain.GetCurrentCurrenciesUseCase
+import ru.golden.currencyconverter.feature.converter.domain.UpdateItemsValueUseCase
+import ru.golden.currencyconverter.feature.converter.presentation.ui.ConverterItemUiModel
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -17,19 +21,26 @@ import javax.inject.Inject
  * Time: 12:19
  */
 const val SECOND_IN_MILLISECONDS = 1000L
+const val DEFAULT_SUM = 100.00
 
 class ConverterViewModel @Inject constructor(
-	private val getCurrentCurrenciesUseCase: GetCurrentCurrenciesUseCase
+	private val getCurrentCurrenciesUseCase: GetCurrentCurrenciesUseCase,
+	private val createUiModelsUseCase: CreateUiModelsUseCase,
+	private val updateItemsValueUseCase: UpdateItemsValueUseCase
 ) : BaseViewModel() {
 
-	private val currencyModels: List<CurrencyModel> = emptyList()
+	val currenciesLoadedEvent = SingleLiveEvent<List<ConverterItemUiModel>>()
+	val currenciesUpdatedEvent = SingleLiveEvent<Unit>()
+
+	private val currencyModels = ArrayList<CurrencyModel>()
 
 	private var getCurrentCurrenciesDisposable: Disposable? = null
+	var baseCurrency = "EUR"
 
 	override fun onBind(state: Bundle?) {
 		getCurrentCurrenciesDisposable = Observable.interval(SECOND_IN_MILLISECONDS, TimeUnit.MILLISECONDS)
 			.flatMap {
-				getCurrentCurrenciesUseCase.execute("EUR").toObservable()
+				getCurrentCurrenciesUseCase.execute(baseCurrency).toObservable()
 			}
 			.subscribeOn(Schedulers.io())
 			.observeOn(AndroidSchedulers.mainThread())
@@ -37,11 +48,24 @@ class ConverterViewModel @Inject constructor(
 	}
 
 	private fun onCurrentCurrenciesLoaded(currencies: List<CurrencyModel>) {
-
+		if (currencies.isNotEmpty()) {
+			if (currencyModels.isEmpty()) {
+				currencyModels.addAll(currencies)
+				currenciesLoadedEvent.postValue(createUiModelsUseCase.execute(currencies, DEFAULT_SUM))
+			} else {
+				currencyModels.clear()
+				currencyModels.addAll(currencies)
+				currenciesUpdatedEvent.call()
+			}
+		}
 	}
 
 	private fun onCurrentCurrenciesLoadingFailed(throwable: Throwable) {
 
+	}
+
+	fun updateItemsValue(uiModels: List<ConverterItemUiModel>) {
+		updateItemsValueUseCase.execute(uiModels, currencyModels)
 	}
 
 	override fun onUnbind() {
