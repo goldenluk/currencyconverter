@@ -5,6 +5,7 @@ import dagger.android.ContributesAndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import ru.golden.currencyconverter.base.network.NetworkModule
 import ru.golden.currencyconverter.feature.converter.ConverterActivity
+import ru.golden.currencyconverter.feature.converter.di.ConverterActivityModule
 
 /**
  * User: Matvei Khadzhiev
@@ -18,6 +19,6 @@ import ru.golden.currencyconverter.feature.converter.ConverterActivity
 interface ApplicationModule {
 
 	@ActivityScope
-	@ContributesAndroidInjector
+	@ContributesAndroidInjector(modules = [ConverterActivityModule::class])
 	fun converterActivityInjector(): ConverterActivity
 }

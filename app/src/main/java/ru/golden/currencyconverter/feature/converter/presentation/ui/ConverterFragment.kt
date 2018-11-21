@@ -25,4 +25,8 @@ class ConverterFragment : BaseFragment<FragmentConverterBinding>() {
 
 	override fun initViewModel(state: Bundle?) = viewModel.onBind(state)
 
+	override fun onDestroy() {
+		super.onDestroy()
+		viewModel.onUnbind()
+	}
 }
