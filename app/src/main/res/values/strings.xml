@@ -1,4 +1,8 @@
 <resources>
 	<string name="app_name">CurrencyConverter</string>
+
+	<string name="errorTitle">Something went wrong</string>
 	<string name="currencyFormat">%.2f</string>
+	<string name="errorDescription">Use pull-to-refresh to retry</string>
+
 </resources>

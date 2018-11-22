@@ -1,7 +1,7 @@
 package ru.golden.currencyconverter.feature.converter
 
 import android.os.Bundle
-import ru.golden.currencyconverter.base.start
+import ru.golden.currencyconverter.base.extensions.start
 import ru.golden.currencyconverter.baseui.BaseActivity
 import ru.golden.currencyconverter.feature.converter.presentation.ui.ConverterFragment
 

@@ -1,4 +1,4 @@
-package ru.golden.currencyconverter.base
+package ru.golden.currencyconverter.base.extensions
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData

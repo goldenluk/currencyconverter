@@ -1,4 +1,4 @@
-package ru.golden.currencyconverter.base
+package ru.golden.currencyconverter.base.extensions
 
 import android.util.Log
 import ru.golden.currencyconverter.BuildConfig

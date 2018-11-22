@@ -1,10 +1,12 @@
 package ru.golden.currencyconverter.feature.converter.presentation.ui
 
 import android.os.Bundle
+import kotlinx.android.synthetic.main.fragment_converter.*
 import ru.golden.currencyconverter.R
-import ru.golden.currencyconverter.base.observe
-import ru.golden.currencyconverter.base.observeRequireNonNull
+import ru.golden.currencyconverter.base.extensions.observe
+import ru.golden.currencyconverter.base.extensions.observeRequireNonNull
 import ru.golden.currencyconverter.baseui.BaseFragment
+import ru.golden.currencyconverter.baseui.ConverterDialogFragment
 import ru.golden.currencyconverter.databinding.FragmentConverterBinding
 import ru.golden.currencyconverter.feature.converter.presentation.ConverterViewModel
 import javax.inject.Inject
@@ -27,6 +29,10 @@ class ConverterFragment : BaseFragment<FragmentConverterBinding>() {
 	override fun initBinding(binding: FragmentConverterBinding) {
 		binding.viewModel = viewModel
 		binding.recyclerView.adapter = adapter
+		binding.swipeRefresh.setOnRefreshListener {
+			viewModel.onRefresh()
+			swipeRefresh.isRefreshing = false
+		}
 	}
 
 	override fun initViewModel(state: Bundle?) {
@@ -38,6 +44,10 @@ class ConverterFragment : BaseFragment<FragmentConverterBinding>() {
 
 		viewModel.currenciesUpdatedEvent.observe(this) {
 			viewModel.updateItemsValue(adapter.items)
+		}
+
+		viewModel.errorEvent.observe(this) {
+			ConverterDialogFragment.create(requireActivity(), R.string.errorTitle, R.string.errorDescription).show(fragmentManager, null)
 		}
 	}
 

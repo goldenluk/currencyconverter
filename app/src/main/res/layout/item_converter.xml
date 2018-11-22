@@ -29,7 +29,8 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@{uiModel.code}"
-			app:layout_constraintStart_toStartOf="parent"/>
+			app:layout_constraintStart_toStartOf="parent"
+			style="@style/TextH6.Transparency87"/>
 
 		<TextView
 			android:id="@+id/currencyName"
@@ -37,14 +38,15 @@
 			android:layout_height="wrap_content"
 			android:text="@{uiModel.name}"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/currencyCode"/>
+			app:layout_constraintTop_toBottomOf="@id/currencyCode"
+			style="@style/TextSubheading"/>
 
 		<EditText
 			android:id="@+id/value"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			textOfDouble="@{uiModel.value}"
-			app:layout_constraintEnd_toEndOf="parent"/>
+			app:layout_constraintEnd_toEndOf="parent"
+			textOfDouble="@{uiModel.value}"/>
 
 	</android.support.constraint.ConstraintLayout>
 

@@ -1,4 +1,4 @@
-package ru.golden.currencyconverter.base
+package ru.golden.currencyconverter.base.extensions
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager

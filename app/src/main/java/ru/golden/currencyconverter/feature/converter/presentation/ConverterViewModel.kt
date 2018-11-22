@@ -7,6 +7,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import ru.golden.currencyconverter.base.BaseViewModel
 import ru.golden.currencyconverter.base.SingleLiveEvent
+import ru.golden.currencyconverter.base.extensions.warning
 import ru.golden.currencyconverter.feature.converter.data.model.CurrencyModel
 import ru.golden.currencyconverter.feature.converter.domain.CreateUiModelsUseCase
 import ru.golden.currencyconverter.feature.converter.domain.GetCurrentCurrenciesUseCase
@@ -29,6 +30,7 @@ class ConverterViewModel @Inject constructor(
 
 	val currenciesLoadedEvent = SingleLiveEvent<List<ConverterItemUiModel>>()
 	val currenciesUpdatedEvent = SingleLiveEvent<Unit>()
+	val errorEvent = SingleLiveEvent<Unit>()
 
 	private val currencyModels = ArrayList<CurrencyModel>()
 
@@ -60,11 +62,21 @@ class ConverterViewModel @Inject constructor(
 	}
 
 	private fun onCurrentCurrenciesLoadingFailed(throwable: Throwable) {
-
+		warning(throwable.message ?: "Error while getting currencies from api")
+		errorEvent.call()
+		onUnbind()
 	}
 
 	fun updateItemsValue(uiModels: List<ConverterItemUiModel>) {
 		updateItemsValueUseCase.execute(uiModels, currencyModels)
+	}
+
+	fun onRefresh() {
+		getCurrentCurrenciesDisposable?.let {
+			if (it.isDisposed) {
+				onBind()
+			}
+		}
 	}
 
 	override fun onUnbind() {
