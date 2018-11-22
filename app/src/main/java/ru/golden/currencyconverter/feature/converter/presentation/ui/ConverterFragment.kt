@@ -55,7 +55,11 @@ class ConverterFragment : BaseFragment<FragmentConverterBinding>() {
 		}
 
 		adapter.itemSelectedEvent.observeRequireNonNull(this) {
-			viewModel.itemSelected(it, adapter.items)
+			viewModel.onItemSelected(it, adapter.items)
+		}
+
+		adapter.baseValueChangedEvent.observeRequireNonNull(this) {
+			viewModel.onBaseValueChanged(it, adapter.items)
 		}
 	}
 

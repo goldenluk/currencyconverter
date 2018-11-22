@@ -42,7 +42,7 @@ class ConverterViewModel @Inject constructor(
 	var baseCurrency = EURO_CODE
 
 	override fun onBind(state: Bundle?) {
-		startUpdating()
+		onStartUpdating()
 	}
 
 	private fun onCurrentCurrenciesLoaded(currencies: List<CurrencyModel>) {
@@ -61,7 +61,7 @@ class ConverterViewModel @Inject constructor(
 	private fun onCurrentCurrenciesLoadingFailed(throwable: Throwable) {
 		warning(throwable.message ?: "Error while getting currencies from api")
 		errorEvent.call()
-		stopUpdating()
+		onStopUpdating()
 	}
 
 	fun updateItemsValue(uiModels: List<ConverterItemUiModel>) {
@@ -77,15 +77,15 @@ class ConverterViewModel @Inject constructor(
 	fun onRefresh() {
 		getCurrentCurrenciesDisposable?.let {
 			if (it.isDisposed) {
-				startUpdating()
+				onStartUpdating()
 			}
 		}
 	}
 
-	private fun stopUpdating() =
+	private fun onStopUpdating() =
 		getCurrentCurrenciesDisposable?.dispose()
 
-	private fun startUpdating() {
+	private fun onStartUpdating() {
 		getCurrentCurrenciesDisposable = getCurrentCurrenciesUseCase.execute(baseCurrency)
 			.subscribeOn(Schedulers.io())
 			.observeOn(AndroidSchedulers.mainThread())
@@ -96,11 +96,15 @@ class ConverterViewModel @Inject constructor(
 		getCurrentCurrenciesDisposable?.dispose()
 	}
 
-	fun itemSelected(selectedCode: String, uiModels: List<ConverterItemUiModel>) {
-		stopUpdating()
+	fun onItemSelected(selectedCode: String, uiModels: List<ConverterItemUiModel>) {
+		onStopUpdating()
 		baseCurrency = selectedCode
 		val updatedUiModels = updateItemsOrderingUseCase.execute(selectedCode, uiModels)
 		currenciesOrderingUpdatedEvent.postValue(updatedUiModels)
-		startUpdating()
+		onStartUpdating()
+	}
+
+	fun onBaseValueChanged(newValue: String, uiModels: List<ConverterItemUiModel>) {
+		uiModels.first().value.set(newValue.replace(",", ".").toDouble())
 	}
 }

@@ -1,6 +1,8 @@
 package ru.golden.currencyconverter.feature.converter.presentation.ui
 
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import ru.golden.currencyconverter.base.SingleLiveEvent
@@ -15,6 +17,7 @@ import javax.inject.Inject
 class ConverterAdapter @Inject constructor() : RecyclerView.Adapter<ConverterAdapter.ConverterItemViewHolder>() {
 
 	val itemSelectedEvent = SingleLiveEvent<String>()
+	val baseValueChangedEvent = SingleLiveEvent<String>()
 
 	var items = emptyList<ConverterItemUiModel>()
 		set(value) {
@@ -38,9 +41,32 @@ class ConverterAdapter @Inject constructor() : RecyclerView.Adapter<ConverterAda
 	) : RecyclerView.ViewHolder(binding.root) {
 
 		fun bind(uiModel: ConverterItemUiModel) {
+			val isFirstItem = items.first().code == uiModel.code
 			binding.uiModel = uiModel
-			binding.isValueEditable = items.first().code == uiModel.code
+			binding.isValueEditable = isFirstItem
 			binding.onItemClickAction = onItemClick
+			if (isFirstItem) {
+				binding.value.addTextChangedListener(textChangedListener)
+			} else {
+				binding.value.removeTextChangedListener(textChangedListener)
+			}
+		}
+
+		private val textChangedListener = object : TextWatcher {
+
+			var oldText = ""
+
+			override fun afterTextChanged(text: Editable) {}
+
+			override fun beforeTextChanged(text: CharSequence, start: Int, count: Int, after: Int) {
+				oldText = text.toString()
+			}
+
+			override fun onTextChanged(text: CharSequence, start: Int, before: Int, count: Int) {
+				if (text.toString() != oldText) {
+					baseValueChangedEvent.postValue(text.toString())
+				}
+			}
 		}
 
 		private val onItemClick: (code: String) -> Unit = {
