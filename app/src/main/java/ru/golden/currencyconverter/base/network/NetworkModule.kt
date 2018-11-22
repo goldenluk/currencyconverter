@@ -31,5 +31,4 @@ abstract class NetworkModule {
 		@JvmStatic
 		fun provideApiEndpoint(): String = API_END_POINT
 	}
-
 }

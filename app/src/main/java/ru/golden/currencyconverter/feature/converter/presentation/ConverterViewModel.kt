@@ -11,6 +11,7 @@ import ru.golden.currencyconverter.feature.converter.data.model.CurrencyModel
 import ru.golden.currencyconverter.feature.converter.domain.CreateUiModelsUseCase
 import ru.golden.currencyconverter.feature.converter.domain.GetCurrentCurrenciesUseCase
 import ru.golden.currencyconverter.feature.converter.domain.UpdateItemsValueUseCase
+import ru.golden.currencyconverter.feature.converter.domain.constants.EURO_CODE
 import ru.golden.currencyconverter.feature.converter.presentation.ui.ConverterItemUiModel
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -20,9 +21,6 @@ import javax.inject.Inject
  * Date: 21.11.2018
  * Time: 12:19
  */
-const val SECOND_IN_MILLISECONDS = 1000L
-const val DEFAULT_SUM = 100.00
-
 class ConverterViewModel @Inject constructor(
 	private val getCurrentCurrenciesUseCase: GetCurrentCurrenciesUseCase,
 	private val createUiModelsUseCase: CreateUiModelsUseCase,
@@ -35,7 +33,8 @@ class ConverterViewModel @Inject constructor(
 	private val currencyModels = ArrayList<CurrencyModel>()
 
 	private var getCurrentCurrenciesDisposable: Disposable? = null
-	var baseCurrency = "EUR"
+
+	var baseCurrency = EURO_CODE
 
 	override fun onBind(state: Bundle?) {
 		getCurrentCurrenciesDisposable = Observable.interval(SECOND_IN_MILLISECONDS, TimeUnit.MILLISECONDS)

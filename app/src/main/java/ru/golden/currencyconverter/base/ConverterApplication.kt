@@ -22,7 +22,6 @@ class ConverterApplication : Application(), HasActivityInjector {
 
 	override fun onCreate() {
 		super.onCreate()
-
 		initDagger()
 	}
 

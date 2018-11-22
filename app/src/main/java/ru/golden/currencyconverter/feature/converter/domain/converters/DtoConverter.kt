@@ -20,18 +20,21 @@ class DtoConverterImpl @Inject constructor() : DtoConverter {
 	override fun convert(dto: CurrencyResponseDto): List<CurrencyModel> {
 		val currencyModels = ArrayList<CurrencyModel>()
 
-		currencyModels.add(CurrencyModel(AUSTRALIAN_CODE, AUSTRALIAN_NAME, dto.rates.australian ?: 0.0))
-		currencyModels.add(CurrencyModel(BRAZILIAN_CODE, BRAZILIAN_NAME, dto.rates.brazilian ?: 0.0))
-		currencyModels.add(CurrencyModel(CANADIAN_CODE, CANADIAN_NAME, dto.rates.canadian ?: 0.0))
-		currencyModels.add(CurrencyModel(CHINESE_CODE, CHINESE_NAME, dto.rates.chinese ?: 0.0))
-		currencyModels.add(CurrencyModel(CZECH_CODE, CZECH_NAME, dto.rates.czech ?: 0.0))
-		currencyModels.add(CurrencyModel(DANISH_CODE, DANISH_NAME, dto.rates.danish ?: 0.0))
-		currencyModels.add(CurrencyModel(STERLING_CODE, STERLING_NAME, dto.rates.sterling ?: 0.0))
-		currencyModels.add(CurrencyModel(MEXICAN_CODE, MEXICAN_NAME, dto.rates.mexican ?: 0.0))
-		currencyModels.add(CurrencyModel(NORWEGIAN_CODE, NORWEGIAN_NAME, dto.rates.norwegian ?: 0.0))
-		currencyModels.add(CurrencyModel(RUSSIAN_CODE, RUSSIAN_NAME, dto.rates.russian ?: 0.0))
-		currencyModels.add(CurrencyModel(TURKISH_CODE, TURKISH_NAME, dto.rates.turkish ?: 0.0))
-		currencyModels.add(CurrencyModel(AMERICAN_CODE, AMERICAN_NAME, dto.rates.american ?: 0.0))
+		dto.rates.australian?.let { currencyModels.add(CurrencyModel(AUSTRALIAN_CODE, AUSTRALIAN_NAME, it)) }
+		dto.rates.brazilian?.let { currencyModels.add(CurrencyModel(BRAZILIAN_CODE, BRAZILIAN_NAME, it)) }
+		dto.rates.canadian?.let { currencyModels.add(CurrencyModel(CANADIAN_CODE, CANADIAN_NAME, it)) }
+		dto.rates.chinese?.let { currencyModels.add(CurrencyModel(CHINESE_CODE, CHINESE_NAME, it)) }
+		dto.rates.czech?.let { currencyModels.add(CurrencyModel(CZECH_CODE, CZECH_NAME, it)) }
+		dto.rates.danish?.let { currencyModels.add(CurrencyModel(DANISH_CODE, DANISH_NAME, it)) }
+		dto.rates.sterling?.let { currencyModels.add(CurrencyModel(STERLING_CODE, STERLING_NAME, it)) }
+		dto.rates.mexican?.let { currencyModels.add(CurrencyModel(MEXICAN_CODE, MEXICAN_NAME, it)) }
+		dto.rates.norwegian?.let { currencyModels.add(CurrencyModel(NORWEGIAN_CODE, NORWEGIAN_NAME, it)) }
+		dto.rates.russian?.let { currencyModels.add(CurrencyModel(RUSSIAN_CODE, RUSSIAN_NAME, it)) }
+		dto.rates.turkish?.let { currencyModels.add(CurrencyModel(TURKISH_CODE, TURKISH_NAME, it)) }
+		dto.rates.american?.let { currencyModels.add(CurrencyModel(AMERICAN_CODE, AMERICAN_NAME, it)) }
+		dto.rates.euro?.let { currencyModels.add(CurrencyModel(EURO_CODE, EURO_NAME, it)) }
+		dto.rates.bulgarian?.let { currencyModels.add(CurrencyModel(BULGARIAN_CODE, BULGARIAN_NAME, it)) }
+		dto.rates.polish?.let { currencyModels.add(CurrencyModel(POLISH_CODE, POLISH_NAME, it)) }
 
 		return currencyModels
 	}

@@ -25,5 +25,8 @@ data class Rates(
 	@SerializedName("NOK") val norwegian: Double?,
 	@SerializedName("RUB") val russian: Double?,
 	@SerializedName("TRY") val turkish: Double?,
-	@SerializedName("USD") val american: Double?
+	@SerializedName("USD") val american: Double?,
+	@SerializedName("EUR") val euro: Double?,
+	@SerializedName("BGN") val bulgarian: Double?,
+	@SerializedName("PLN") val polish: Double?
 )

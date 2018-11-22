@@ -1,6 +1,8 @@
 package ru.golden.currencyconverter.feature.converter.domain
 
 import ru.golden.currencyconverter.feature.converter.data.model.CurrencyModel
+import ru.golden.currencyconverter.feature.converter.domain.constants.EURO_CODE
+import ru.golden.currencyconverter.feature.converter.domain.constants.EURO_NAME
 import ru.golden.currencyconverter.feature.converter.domain.converters.UiModelConverter
 import ru.golden.currencyconverter.feature.converter.presentation.ui.ConverterItemUiModel
 import javax.inject.Inject
@@ -15,6 +17,9 @@ interface CreateUiModelsUseCase {
 	fun execute(currencyModels: List<CurrencyModel>, baseValue: Double): List<ConverterItemUiModel>
 }
 
+/**
+ * Using only when uiModels creating first time
+ */
 class CreateUiModelsUseCaseImpl @Inject constructor(
 	private val uiModelConverter: UiModelConverter
 ) : CreateUiModelsUseCase {
@@ -23,8 +28,8 @@ class CreateUiModelsUseCaseImpl @Inject constructor(
 		val uiModels = ArrayList<ConverterItemUiModel>()
 
 		uiModels.add(ConverterItemUiModel(
-			name = "Euro",
-			code = "EUR"
+			name = EURO_NAME,
+			code = EURO_CODE
 		))
 		uiModels.first().value.set(baseValue)
 

@@ -10,20 +10,24 @@ import javax.inject.Inject
  * Date: 22.11.2018
  * Time: 0:40
  */
+const val BASE_RATE = 1.0
+
 interface UpdateItemsValueUseCase {
 
 	fun execute(uiModelItems: List<ConverterItemUiModel>, currencyModels: List<CurrencyModel>)
 }
 
+/**
+ * Updating all values except first(base) value
+ */
 class UpdateItemsValueUseCaseImpl @Inject constructor() : UpdateItemsValueUseCase {
 
-	override fun execute(uiModelItems: List<ConverterItemUiModel>, currencyModels: List<CurrencyModel>) {
+	override fun execute(uiModelItems: List<ConverterItemUiModel>, currencyModels: List<CurrencyModel>) =
 		uiModelItems.forEach { uiModel ->
 			if (uiModel.code != uiModelItems.first().code) {
-				val newRate = currencyModels.find { it.code == uiModel.code }?.rateToBase ?: 1.0
+				val newRate = currencyModels.find { it.code == uiModel.code }?.rateToBase ?: BASE_RATE
 				val baseValue = uiModelItems.first().value.get() ?: DEFAULT_SUM
 				uiModel.value.set(baseValue * newRate)
 			}
 		}
-	}
 }
