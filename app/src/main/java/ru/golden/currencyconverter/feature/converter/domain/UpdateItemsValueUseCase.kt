@@ -1,5 +1,6 @@
 package ru.golden.currencyconverter.feature.converter.domain
 
+import io.reactivex.Completable
 import ru.golden.currencyconverter.feature.converter.data.model.CurrencyModel
 import ru.golden.currencyconverter.feature.converter.presentation.DEFAULT_SUM
 import ru.golden.currencyconverter.feature.converter.presentation.ui.ConverterItemUiModel
@@ -14,7 +15,7 @@ const val BASE_RATE = 1.0
 
 interface UpdateItemsValueUseCase {
 
-	fun execute(uiModelItems: List<ConverterItemUiModel>, currencyModels: List<CurrencyModel>)
+	fun execute(uiModelItems: List<ConverterItemUiModel>, currencyModels: List<CurrencyModel>) : Completable
 }
 
 /**
@@ -22,12 +23,14 @@ interface UpdateItemsValueUseCase {
  */
 class UpdateItemsValueUseCaseImpl @Inject constructor() : UpdateItemsValueUseCase {
 
-	override fun execute(uiModelItems: List<ConverterItemUiModel>, currencyModels: List<CurrencyModel>) =
-		uiModelItems.forEach { uiModel ->
-			if (uiModel.code != uiModelItems.first().code) {
-				val newRate = currencyModels.find { it.code == uiModel.code }?.rateToBase ?: BASE_RATE
-				val baseValue = uiModelItems.first().value.get() ?: DEFAULT_SUM
-				uiModel.value.set(baseValue * newRate)
+	override fun execute(uiModelItems: List<ConverterItemUiModel>, currencyModels: List<CurrencyModel>) : Completable =
+		Completable.fromCallable {
+			uiModelItems.forEach { uiModel ->
+				if (uiModel.code != uiModelItems.first().code) {
+					val newRate = currencyModels.find { it.code == uiModel.code }?.rateToBase ?: BASE_RATE
+					val baseValue = uiModelItems.first().value.get() ?: DEFAULT_SUM
+					uiModel.value.set(baseValue * newRate)
+				}
 			}
 		}
 }

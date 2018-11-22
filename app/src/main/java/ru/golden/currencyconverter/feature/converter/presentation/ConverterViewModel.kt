@@ -4,9 +4,11 @@ import android.os.Bundle
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import ru.golden.currencyconverter.base.BaseViewModel
 import ru.golden.currencyconverter.base.SingleLiveEvent
+import ru.golden.currencyconverter.base.extensions.debug
 import ru.golden.currencyconverter.base.extensions.warning
 import ru.golden.currencyconverter.feature.converter.data.model.CurrencyModel
 import ru.golden.currencyconverter.feature.converter.domain.CreateUiModelsUseCase
@@ -69,6 +71,12 @@ class ConverterViewModel @Inject constructor(
 
 	fun updateItemsValue(uiModels: List<ConverterItemUiModel>) {
 		updateItemsValueUseCase.execute(uiModels, currencyModels)
+			.subscribeOn(Schedulers.computation())
+			.observeOn(AndroidSchedulers.mainThread())
+			.subscribeBy(
+				onComplete = { debug("Items updated") },
+				onError = { warning("Error when updating items: $it") }
+			)
 	}
 
 	fun onRefresh() {
