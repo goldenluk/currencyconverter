@@ -29,6 +29,8 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@{uiModel.code}"
+			android:paddingStart="@dimen/offset8"
+			android:paddingEnd="@dimen/offset8"
 			app:layout_constraintStart_toStartOf="parent"
 			style="@style/TextH6.Transparency87"/>
 
@@ -36,7 +38,10 @@
 			android:id="@+id/currencyName"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:paddingBottom="@dimen/offset16"
 			android:text="@{uiModel.name}"
+			android:paddingStart="@dimen/offset8"
+			android:paddingEnd="@dimen/offset8"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toBottomOf="@id/currencyCode"
 			style="@style/TextSubheading"/>
@@ -45,8 +50,12 @@
 			android:id="@+id/value"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			app:layout_constraintEnd_toEndOf="parent"
+			android:paddingStart="@dimen/offset8"
+			android:paddingEnd="@dimen/offset8"
 			android:enabled="@{isValueEditable}"
+			app:layout_constraintTop_toTopOf="@id/currencyCode"
+			app:layout_constraintBottom_toBottomOf="@id/currencyName"
+			app:layout_constraintEnd_toEndOf="parent"
 			textOfDouble="@{uiModel.value}"/>
 
 	</android.support.constraint.ConstraintLayout>

@@ -1,8 +1,10 @@
 package ru.golden.currencyconverter.feature.converter.domain
 
-import io.reactivex.Single
+import io.reactivex.Observable
 import ru.golden.currencyconverter.feature.converter.data.model.CurrencyModel
 import ru.golden.currencyconverter.feature.converter.domain.converters.DtoConverter
+import ru.golden.currencyconverter.feature.converter.presentation.SECOND_IN_MILLISECONDS
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -12,7 +14,7 @@ import javax.inject.Inject
  */
 interface GetCurrentCurrenciesUseCase {
 
-	fun execute(base: String): Single<List<CurrencyModel>>
+	fun execute(base: String): Observable<List<CurrencyModel>>
 }
 
 class GetCurrentCurrenciesUseCaseImpl @Inject constructor(
@@ -20,7 +22,11 @@ class GetCurrentCurrenciesUseCaseImpl @Inject constructor(
 	private val dtoConverter: DtoConverter
 ) : GetCurrentCurrenciesUseCase {
 
-	override fun execute(base: String): Single<List<CurrencyModel>> =
-		converterRepository.getFreshCurrencies(base)
+	override fun execute(base: String): Observable<List<CurrencyModel>> =
+		Observable.interval(SECOND_IN_MILLISECONDS, TimeUnit.MILLISECONDS)
+			.flatMap {
+				converterRepository.getFreshCurrencies(base).toObservable()
+			}
 			.map(dtoConverter::convert)
+
 }

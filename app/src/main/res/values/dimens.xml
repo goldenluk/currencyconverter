@@ -4,4 +4,7 @@
 	<dimen name="textSubheading">16sp</dimen>
 	<dimen name="textH6">20sp</dimen>
 
+	<dimen name="offset8">8dp</dimen>
+	<dimen name="offset16">16dp</dimen>
+
 </resources>

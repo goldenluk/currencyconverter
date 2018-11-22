@@ -1,7 +1,6 @@
 package ru.golden.currencyconverter.feature.converter.presentation
 
 import android.os.Bundle
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
@@ -16,7 +15,6 @@ import ru.golden.currencyconverter.feature.converter.domain.GetCurrentCurrencies
 import ru.golden.currencyconverter.feature.converter.domain.UpdateItemsValueUseCase
 import ru.golden.currencyconverter.feature.converter.domain.constants.EURO_CODE
 import ru.golden.currencyconverter.feature.converter.presentation.ui.ConverterItemUiModel
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -41,13 +39,8 @@ class ConverterViewModel @Inject constructor(
 	var baseCurrency = EURO_CODE
 
 	override fun onBind(state: Bundle?) {
-		getCurrentCurrenciesDisposable = Observable.interval(SECOND_IN_MILLISECONDS, TimeUnit.MILLISECONDS)
-			.flatMap {
-				getCurrentCurrenciesUseCase.execute(baseCurrency).toObservable()
-			}
-			.subscribeOn(Schedulers.io())
-			.observeOn(AndroidSchedulers.mainThread())
-			.subscribe(this::onCurrentCurrenciesLoaded, this::onCurrentCurrenciesLoadingFailed)
+		getCurrentCurrenciesDisposable =
+			startUpdating()
 	}
 
 	private fun onCurrentCurrenciesLoaded(currencies: List<CurrencyModel>) {
@@ -82,10 +75,16 @@ class ConverterViewModel @Inject constructor(
 	fun onRefresh() {
 		getCurrentCurrenciesDisposable?.let {
 			if (it.isDisposed) {
-				onBind()
+				startUpdating()
 			}
 		}
 	}
+
+	private fun startUpdating() =
+		getCurrentCurrenciesUseCase.execute(baseCurrency)
+			.subscribeOn(Schedulers.io())
+			.observeOn(AndroidSchedulers.mainThread())
+			.subscribe(this::onCurrentCurrenciesLoaded, this::onCurrentCurrenciesLoadingFailed)
 
 	override fun onUnbind() {
 		getCurrentCurrenciesDisposable?.dispose()
