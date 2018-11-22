@@ -15,14 +15,15 @@
 			type="Boolean"/>
 
 		<variable
-			name="onMenuClickAction"
+			name="onItemClickAction"
 			type="kotlin.jvm.functions.Function1&lt;String,Unit>"/>
 
 	</data>
 
 	<android.support.constraint.ConstraintLayout
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+		android:layout_height="wrap_content"
+		android:onClick="@{() -> onItemClickAction.invoke(uiModel.code)}">
 
 		<TextView
 			android:id="@+id/currencyCode"
@@ -50,6 +51,7 @@
 			android:id="@+id/value"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:paddingBottom="@dimen/offset16"
 			android:paddingStart="@dimen/offset8"
 			android:paddingEnd="@dimen/offset8"
 			android:enabled="@{isValueEditable}"

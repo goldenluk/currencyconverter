@@ -49,6 +49,14 @@ class ConverterFragment : BaseFragment<FragmentConverterBinding>() {
 		viewModel.errorEvent.observe(this) {
 			ConverterDialogFragment.create(requireActivity(), R.string.errorTitle, R.string.errorDescription).show(fragmentManager, null)
 		}
+
+		viewModel.currenciesOrderingUpdatedEvent.observeRequireNonNull(this) {
+			adapter.items = it
+		}
+
+		adapter.itemSelectedEvent.observeRequireNonNull(this) {
+			viewModel.itemSelected(it, adapter.items)
+		}
 	}
 
 	override fun onDestroy() {

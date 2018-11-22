@@ -3,6 +3,7 @@ package ru.golden.currencyconverter.feature.converter.presentation.ui
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import ru.golden.currencyconverter.base.SingleLiveEvent
 import ru.golden.currencyconverter.databinding.ItemConverterBinding
 import javax.inject.Inject
 
@@ -12,6 +13,8 @@ import javax.inject.Inject
  * Time: 21:35
  */
 class ConverterAdapter @Inject constructor() : RecyclerView.Adapter<ConverterAdapter.ConverterItemViewHolder>() {
+
+	val itemSelectedEvent = SingleLiveEvent<String>()
 
 	var items = emptyList<ConverterItemUiModel>()
 		set(value) {
@@ -37,6 +40,11 @@ class ConverterAdapter @Inject constructor() : RecyclerView.Adapter<ConverterAda
 		fun bind(uiModel: ConverterItemUiModel) {
 			binding.uiModel = uiModel
 			binding.isValueEditable = items.first().code == uiModel.code
+			binding.onItemClickAction = onItemClick
+		}
+
+		private val onItemClick: (code: String) -> Unit = {
+			itemSelectedEvent.postValue(it)
 		}
 	}
 }

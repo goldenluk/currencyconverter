@@ -53,4 +53,8 @@ abstract class ConverterModule {
 	@Binds
 	@FragmentScope
 	abstract fun bindUpdateItemsValueUseCase(impl: UpdateItemsValueUseCaseImpl): UpdateItemsValueUseCase
+
+	@Binds
+	@FragmentScope
+	abstract fun bindUpdateItemsOrderingUseCase(impl: UpdateItemsOrderingUseCaseImpl): UpdateItemsOrderingUseCase
 }
