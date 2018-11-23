@@ -36,7 +36,7 @@ abstract class ConverterModule {
 
 	@Binds
 	@FragmentScope
-	abstract fun bindGetCurrentCurrenciesUseCase(impl: GetCurrentCurrenciesUseCaseImpl): GetCurrentCurrenciesUseCase
+	abstract fun bindGetCurrentCurrenciesUseCase(impl: ObserveCurrentCurrenciesUseCaseImpl): ObserveCurrentCurrenciesUseCase
 
 	@Binds
 	@FragmentScope

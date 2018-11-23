@@ -11,7 +11,7 @@ import ru.golden.currencyconverter.base.extensions.debug
 import ru.golden.currencyconverter.base.extensions.warning
 import ru.golden.currencyconverter.feature.converter.data.model.CurrencyModel
 import ru.golden.currencyconverter.feature.converter.domain.CreateUiModelsUseCase
-import ru.golden.currencyconverter.feature.converter.domain.GetCurrentCurrenciesUseCase
+import ru.golden.currencyconverter.feature.converter.domain.ObserveCurrentCurrenciesUseCase
 import ru.golden.currencyconverter.feature.converter.domain.UpdateItemsOrderingUseCase
 import ru.golden.currencyconverter.feature.converter.domain.UpdateItemsValueUseCase
 import ru.golden.currencyconverter.feature.converter.domain.constants.EURO_CODE
@@ -24,7 +24,7 @@ import javax.inject.Inject
  * Time: 12:19
  */
 class ConverterViewModel @Inject constructor(
-	private val getCurrentCurrenciesUseCase: GetCurrentCurrenciesUseCase,
+	private val observeCurrentCurrenciesUseCase: ObserveCurrentCurrenciesUseCase,
 	private val createUiModelsUseCase: CreateUiModelsUseCase,
 	private val updateItemsValueUseCase: UpdateItemsValueUseCase,
 	private val updateItemsOrderingUseCase: UpdateItemsOrderingUseCase
@@ -86,7 +86,7 @@ class ConverterViewModel @Inject constructor(
 		getCurrentCurrenciesDisposable?.dispose()
 
 	private fun onStartUpdating() {
-		getCurrentCurrenciesDisposable = getCurrentCurrenciesUseCase.execute(baseCurrency)
+		getCurrentCurrenciesDisposable = observeCurrentCurrenciesUseCase.execute(baseCurrency)
 			.subscribeOn(Schedulers.io())
 			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe(this::onCurrentCurrenciesLoaded, this::onCurrentCurrenciesLoadingFailed)

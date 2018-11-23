@@ -12,15 +12,15 @@ import javax.inject.Inject
  * Date: 21.11.2018
  * Time: 14:39
  */
-interface GetCurrentCurrenciesUseCase {
+interface ObserveCurrentCurrenciesUseCase {
 
 	fun execute(base: String): Observable<List<CurrencyModel>>
 }
 
-class GetCurrentCurrenciesUseCaseImpl @Inject constructor(
+class ObserveCurrentCurrenciesUseCaseImpl @Inject constructor(
 	private val converterRepository: ConverterRepository,
 	private val dtoConverter: DtoConverter
-) : GetCurrentCurrenciesUseCase {
+) : ObserveCurrentCurrenciesUseCase {
 
 	override fun execute(base: String): Observable<List<CurrencyModel>> =
 		Observable.interval(SECOND_IN_MILLISECONDS, TimeUnit.MILLISECONDS)

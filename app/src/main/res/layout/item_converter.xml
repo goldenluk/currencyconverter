@@ -54,6 +54,7 @@
 			android:paddingBottom="@dimen/offset16"
 			android:paddingStart="@dimen/offset8"
 			android:paddingEnd="@dimen/offset8"
+			android:inputType="number"
 			android:enabled="@{isValueEditable}"
 			app:layout_constraintTop_toTopOf="@id/currencyCode"
 			app:layout_constraintBottom_toBottomOf="@id/currencyName"

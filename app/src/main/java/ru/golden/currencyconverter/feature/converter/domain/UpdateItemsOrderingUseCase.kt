@@ -20,8 +20,7 @@ class UpdateItemsOrderingUseCaseImpl @Inject constructor() : UpdateItemsOrdering
 		val baseItem = uiModels.first()
 		val selectedItem = uiModels.find { it.code == selectedCode }
 		val selectedItemIndex = uiModels.indexOf(selectedItem)
-		//The most logical solution to situation when collection has not got selected item - crash
-		(uiModels as ArrayList)[0] = selectedItem!!
+		(uiModels as ArrayList)[0] = requireNotNull(selectedItem)
 		uiModels[selectedItemIndex] = baseItem
 		return uiModels
 	}
